@@ -13,7 +13,7 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
             print(user, "channels")
             await self.accept()
 
-            self.joined_rooms = ['chatroom','group4', 'xyz']  #list should come from database
+            self.joined_rooms = ['chatroom', "group2"]  #list should come from database
             for room in self.joined_rooms:
                 await self.channel_layer.group_add(
                     'group_' + str(room),
@@ -75,7 +75,7 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
                 'username': username,
                 'userid' : userid
             }))
-            print("sent2", "???")
+            print("sent2")
         except Exception as e:
             
             print(e, "exception")
