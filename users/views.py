@@ -84,7 +84,7 @@ class LogoutView(APIView):
             return Response(message, status=status.HTTP_404_NOT_FOUND)
 
 
-class CustomAuthToken(ObtainAuthToken):
+class LoginView(ObtainAuthToken):
     permission_classes = [AllowAny]
     serializer_class = AuthTokenSerializer
 
@@ -97,7 +97,9 @@ class CustomAuthToken(ObtainAuthToken):
         return Response({
             'token': token.key,
             'user_id': user.id,
-            'email': user.email
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
         }, status=status.HTTP_200_OK)
 
     # def get(self, request):
@@ -153,3 +155,4 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     serializer_class = UserCreateSerializer
     queryset = User.objects.all()
+    permission_classes = (AllowAny,)

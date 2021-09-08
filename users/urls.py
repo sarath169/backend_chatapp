@@ -5,7 +5,7 @@ from rest_framework import routers
 
 from users.views import (
     GoogleValidateUserId, GoogleSignupAPIView,
-    CustomAuthToken, UserViewSet
+    LoginView, UserViewSet
 )
 
 urlpatterns = [
@@ -15,7 +15,7 @@ urlpatterns = [
     ),
     path('google/signup/', GoogleSignupAPIView.as_view(), name="google-signup"),
     # path('login/', obtain_auth_token, name='login'),
-    path('get-auth-token/', CustomAuthToken.as_view(), name='get-auth-token'),
+    path('login/', LoginView.as_view(), name='login'),
 ]
 
 router = routers.SimpleRouter()

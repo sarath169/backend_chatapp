@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
-from rest_framework.authtoken.models import Token
+# from rest_framework.authtoken.models import Token
 
 # from users.models import UserSocialAccount
 
@@ -28,10 +28,12 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
+        password = validated_data.pop("password")
         user = super(UserCreateSerializer, self).create(validated_data)
+        user.set_password(password)
         user.save()
         # create token for the user
-        Token.objects.get_or_create(user=user)
+        # Token.objects.get_or_create(user=user)
         return user
 
 
@@ -83,10 +85,6 @@ class AuthTokenSerializer(serializers.Serializer):
         style={'input_type': 'password'},
         trim_whitespace=False,
         write_only=True
-    )
-    token = serializers.CharField(
-        label=_("Token"),
-        read_only=True
     )
 
     def validate(self, attrs):
