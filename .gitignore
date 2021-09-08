@@ -2,7 +2,6 @@
 __pycache__/
 *.py[cod]
 *$py.class
-migrations/
 
 # C extensions
 *.so
@@ -139,10 +138,11 @@ tmtags
 *.db
 *.sqlite
 *.sqlite3
+*.rdb
 
-#django production
-static/
-media/
+# django production
+# static/
+# media/
 
 # OS files
 .DS_Store
