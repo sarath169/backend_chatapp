@@ -37,13 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'chat',
-    'validate',
+
+    'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
     'channels',
+
+    'users',
+    'chat',
 ]
+
+AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -62,7 +67,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
-    'DEFAULT_PERMISSION_CLASSES':[
+    'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
@@ -163,3 +168,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 ASGI_APPLICATION = 'backend.asgi.application'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
