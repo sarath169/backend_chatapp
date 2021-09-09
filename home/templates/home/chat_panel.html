@@ -25,6 +25,22 @@
       </article>
     </div> <!-- card.// -->
 </div>
+<div class="container">
+    <br>
+    <div class="card bg-light">
+      <div class="chat-messages">
+
+      </div>
+        <article class="card-body mx-auto" style="max-width: 700px;">
+          <form id="chat-form">
+            <div class="form-group">
+              <input name="message-text" class="form-control" placeholder="Enter new message" type="text" autocomplete="off">
+            </div>
+            <button type="submit" class="btn btn-primary" id="send-msg"> Send </button>
+          </form>
+        </article>
+    </div>
+</div>
 <script src="{% static 'home/js/chat.js' %}"></script>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -32,12 +48,70 @@
         Chat.init();
 
         if (sessionStorage.getItem("token") != null || sessionStorage.getItem("token") != undefined) {
-            $("#user-info").html("Hi, I am logged in as " + sessionStorage.getItem("first_name"));
+            $("#user-info").html("Hi, I am logged in as " + sessionStorage.getItem("first_name") + " ("+ sessionStorage.getItem("user_id") +") ");
         }
         else {
           location.href = Chat.login_view_url;
         }
+
+        if (Chat.messages_list){
+          $.each(Chat.messages_list, function(msg){
+            $(".chat-messages").append("<p>" + msg + "</p>")
+          })
+        }
     });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js" integrity="sha512-B4skI5FiLurS86aioJx9VfozI1wjqrn6aTdJH+YQUmCZum/ZibPBTX55k5d9XM6EsKePDInkLVrN7vPmJxc1qA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="text/javascript">
+  // socket code starts
+    var loc = window.location
+    var chat_holder = $(".chat-messages")
+    var formData = $("#chat-form")
+    var wsStart = "ws://"
+    var endpoint = wsStart + loc.host + loc.pathname + "?token="+sessionStorage.getItem("token")
+    var socket = new ReconnectingWebSocket(endpoint)
+    var me = sessionStorage.getItem("first_name") + " " + sessionStorage.getItem("last_name")
+
+    socket.onmessage = function(e) {
+        console.log("message", e);
+        var chat_data = JSON.parse(e.data);
+        console.log(me, me == chat_data.username)
+        if (me == chat_data.username) {
+          style = 'style="text-align: right; list-style: circle;"'
+        }
+        else {
+          style = 'style="text-align: left; list-style: circle;"'
+        }
+        chat_holder.append(
+          "<li "+style+"> "+ chat_data.message + " via <i>" + chat_data.username +"</i></li>"
+        );
+    }
+
+    socket.onopen = function (e) {
+        console.log("open", e)
+        formData.submit(function (event){
+            event.preventDefault();
+            msg = $("input[name='message-text']").val();
+            if (msg){
+
+              finalData = {
+                  "message": msg
+              }
+              socket.send(JSON.stringify(finalData));
+              $("input[name='message-text']").val('');
+            }
+        })
+    }
+
+    socket.onerror = function (e) {
+        console.log("error", e)
+    }
+
+    socket.onclose = function (e) {
+        console.log("close", e)
+    }
+
+    // socket code ends
 </script>
 </body>
 </html>

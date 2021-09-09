@@ -44,11 +44,11 @@
 <script type="text/javascript">
     $(document).ready(function() {
         Login.login_api_url = "{% url 'login' %}";
-        Login.chat_panel_url = "{% url 'chat-panel' %}";
+        Login.chat_panel_url = "{% url 'chat-panel' 9999 %}";
         Login.init();
 
         if (sessionStorage.getItem("token") != null || sessionStorage.getItem("token") != undefined) {
-            location.href = Login.chat_panel_url;
+            location.href = Login.chat_panel_url.replace("9999", sessionStorage.getItem("user_id"));
         }
     });
 </script>

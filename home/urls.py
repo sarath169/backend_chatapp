@@ -1,8 +1,11 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 from home.views import WebLoginView, ChatPanelView
 
 urlpatterns = [
     path('login/', WebLoginView.as_view(), name='web-login'),
-    path('chat-panel/', ChatPanelView.as_view(), name='chat-panel'),
+    re_path(
+        r"^messages/(?P<user_id>[\w-]+)/$", ChatPanelView.as_view(),
+        name='chat-panel'
+    ),
 ]

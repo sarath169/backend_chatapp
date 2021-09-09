@@ -19,7 +19,8 @@ var Login = {
                     $.each(response, function(key, value) {
                         sessionStorage.setItem(key, value);
                     });
-                    location.href = Login.chat_panel_url;
+                    location.href = Login.chat_panel_url.replace(
+                        '9999', sessionStorage.getItem("user_id"));
                 },
                 error: function(xhr, errmsg, err){
                     error_responses = xhr.responseJSON
